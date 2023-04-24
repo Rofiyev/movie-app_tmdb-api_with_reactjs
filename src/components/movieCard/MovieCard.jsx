@@ -22,4 +22,5 @@ const MovieCard = ({ item, categoryName }) => {
   )
 }
 
-export default MovieCard
+export default MovieCard;
+
