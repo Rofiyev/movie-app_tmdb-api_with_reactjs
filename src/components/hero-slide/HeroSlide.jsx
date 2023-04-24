@@ -60,11 +60,10 @@ const HeroSlideItem = props => {
   const setModalActive = async () => {
     const modal = document.querySelector(`#modal_${item.id}`);
     const videos = await tmdbAPI.getVideos(category.movie, item.id);
-    console.log(videos);
 
-    if (videos.results.lenght > 0) {
-      const videoSrc = `https://www.youtube.com/embed/${videos.results[2].key}`;
-      modal.querySelector('.modal__content > iframe').setAttribute('src', videoSrc);
+    if (videos.results) {
+      const videoSrc = `https://www.youtube.com/embed/${videos.results[1].key}`;
+      modal.querySelector('.modal__content > iframe').setAttribute('src', `${videoSrc}`);
     }
 
     modal.classList.toggle('active');
@@ -98,7 +97,6 @@ const HeroSlideItem = props => {
 
 const TrailerModal = props => {
   const item = props.item;
-
   const iframeRef = useRef(null);
 
   const onClose = () => iframeRef.current.setAttribute('src', '');

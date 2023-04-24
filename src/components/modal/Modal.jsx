@@ -36,7 +36,7 @@ export const ModalContent = props => {
     <div ref={contentRef} className="modal__content">
       {props.children}
       <div className="modal__content__close">
-        <FontAwesomeIcon style={{margin: '10px 10px 10px 0', fontSize: '1.2rem'}} icon={faXmark} className='icon' onClick={closeModal} />
+        <FontAwesomeIcon style={{ margin: '5px', fontSize: '1.4rem', cursor: 'pointer' }} icon={faXmark} className='icon' onClick={closeModal} />
       </div>
     </div>
   )
