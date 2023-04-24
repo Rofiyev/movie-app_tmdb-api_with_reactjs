@@ -2,8 +2,8 @@ import React from 'react';
 import HeroSlide from '../components/hero-slide/HeroSlide';
 import { Link } from 'react-router-dom';
 import { OutlineButton } from '../components/button/Button';
-import MovieList from '../components/movie-list/MovieList';
 import { category, movieType, tvType } from '../api/tmdbAPI';
+import MovieList from '../components/movieList/MovieList';
 
 const Home = () => {
   return (
@@ -39,7 +39,7 @@ const Home = () => {
           </div>
           <MovieList category={category.tv} type={tvType.popular} />
         </div>
-        
+
       </div>
     </>
   )
