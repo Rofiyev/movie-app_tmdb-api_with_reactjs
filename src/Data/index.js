@@ -31,4 +31,4 @@ export const footerData = {
     { slug: '/', title: 'Recent release' },
     { slug: '/', title: 'Top IMBD' },
   ],
-}
+};
