@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import tmdbAPI, { category, movieType } from '../../api/tmdbAPI';
 import apiConfig from '../../api/APIconfig';
 import SwiperCore, { Autoplay } from 'swiper';
@@ -7,9 +7,11 @@ import Button, { OutlineButton } from '../button/Button';
 import { useNavigate } from 'react-router-dom';
 import './hero-slide.scss';
 import Modal, { ModalContent } from '../modal/Modal';
+import { MyContext } from '../../App';
 
 const HeroSlide = () => {
   const [movieItems, setMovieItems] = useState([]);
+  const { setLoadingStop } = useContext(MyContext)
 
   SwiperCore.use([Autoplay]);
 
@@ -18,6 +20,8 @@ const HeroSlide = () => {
       const params = { page: 1 };
       try {
         const response = await tmdbAPI.getMoviesList(movieType.popular, { params });
+        console.log(response);
+        setLoadingStop();
         setMovieItems(response.results.slice(0, 6));
       } catch (error) {
         console.log(error);
