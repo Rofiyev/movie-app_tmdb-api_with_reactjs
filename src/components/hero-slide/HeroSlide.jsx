@@ -7,11 +7,11 @@ import Button, { OutlineButton } from '../button/Button';
 import { useNavigate } from 'react-router-dom';
 import './hero-slide.scss';
 import Modal, { ModalContent } from '../modal/Modal';
-import { MyContext } from '../../App';
+import MyContext from '../Context';
 
 const HeroSlide = () => {
   const [movieItems, setMovieItems] = useState([]);
-  const { setLoadingStop } = useContext(MyContext)
+  const { setLoading } = useContext(MyContext)
 
   SwiperCore.use([Autoplay]);
 
@@ -20,8 +20,8 @@ const HeroSlide = () => {
       const params = { page: 1 };
       try {
         const response = await tmdbAPI.getMoviesList(movieType.popular, { params });
+        response.results && setLoading(prev => !prev);
         console.log(response);
-        setLoadingStop();
         setMovieItems(response.results.slice(0, 6));
       } catch (error) {
         console.log(error);
