@@ -1,37 +1,34 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import tmdbAPI, { category, movieType } from '../../api/tmdbAPI';
-import apiConfig from '../../api/APIconfig';
-import SwiperCore, { Autoplay } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import Button, { OutlineButton } from '../button/Button';
-import { useNavigate } from 'react-router-dom';
-import './hero-slide.scss';
-import Modal, { ModalContent } from '../modal/Modal';
-import MyContext from '../Context';
+import React, { useContext, useEffect, useRef, useState } from "react";
+import tmdbAPI, { category, movieType } from "../../api/tmdbAPI";
+import apiConfig from "../../api/APIconfig";
+import SwiperCore, { Autoplay } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import Button, { OutlineButton } from "../button/Button";
+import { useNavigate } from "react-router-dom";
+import "./hero-slide.scss";
+import Modal, { ModalContent } from "../modal/Modal";
 
 const HeroSlide = () => {
   const [movieItems, setMovieItems] = useState([]);
-  const { setLoading } = useContext(MyContext)
 
   SwiperCore.use([Autoplay]);
 
   useEffect(() => {
-    const getMoveis = async () => {
+    (async () => {
       const params = { page: 1 };
       try {
-        const response = await tmdbAPI.getMoviesList(movieType.popular, { params });
-        response.results && setLoading(prev => !prev);
-        console.log(response);
-        setMovieItems(response.results.slice(0, 6));
+        const response = await tmdbAPI.getMoviesList(movieType.popular, {
+          params,
+        });
+        setMovieItems(response?.results?.slice(0, 6));
       } catch (error) {
         console.log(error);
       }
-    }
-    getMoveis();
+    })();
   }, []);
 
   return (
-    <div className='hero-slide'>
+    <div className="hero-slide">
       <Swiper
         modules={[Autoplay]}
         grabCursor={true}
@@ -40,26 +37,31 @@ const HeroSlide = () => {
         loop={true}
         autoplay={{ delay: 4000 }}
       >
-        {
-          movieItems.map((data, i) => (
-            <SwiperSlide key={i}>
-              {({ isActive }) => (
-                <HeroSlideItem item={data} className={`${isActive ? 'active' : ''}`} />
-              )}
-            </SwiperSlide>
-          ))
-        }
+        {movieItems.map((data, i) => (
+          <SwiperSlide key={i}>
+            {({ isActive }) => (
+              <HeroSlideItem
+                item={data}
+                className={`${isActive && "active"}`}
+              />
+            )}
+          </SwiperSlide>
+        ))}
       </Swiper>
-      {movieItems.map((data, i) => (<TrailerModal key={i} item={data} />))}
+      {movieItems.map((data, i) => (
+        <TrailerModal key={i} item={data} />
+      ))}
     </div>
-  )
-}
+  );
+};
 
-const HeroSlideItem = props => {
+const HeroSlideItem = (props) => {
   const navigate = useNavigate();
 
   const item = props.item;
-  const background = apiConfig.origninalImage(item.backdrop_path ? item.backdrop_path : item.paster.path);
+  const background = apiConfig.origninalImage(
+    item.backdrop_path ? item.backdrop_path : item.paster.path
+  );
 
   const setModalActive = async () => {
     const modal = document.querySelector(`#modal_${item.id}`);
@@ -67,11 +69,13 @@ const HeroSlideItem = props => {
 
     if (videos.results) {
       const videoSrc = `https://www.youtube.com/embed/${videos.results[1].key}`;
-      modal.querySelector('.modal__content > iframe').setAttribute('src', `${videoSrc}`);
+      modal
+        .querySelector(".modal__content > iframe")
+        .setAttribute("src", `${videoSrc}`);
     }
 
-    modal.classList.toggle('active');
-  }
+    modal.classList.toggle("active");
+  };
 
   return (
     <div
@@ -96,21 +100,26 @@ const HeroSlideItem = props => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-const TrailerModal = props => {
+const TrailerModal = (props) => {
   const item = props.item;
   const iframeRef = useRef(null);
 
-  const onClose = () => iframeRef.current.setAttribute('src', '');
+  const onClose = () => iframeRef.current.setAttribute("src", "");
   return (
     <Modal active={false} id={`modal_${item.id}`}>
       <ModalContent onClose={onClose}>
-        <iframe ref={iframeRef} width='100%' height='500px' title='trailer'></iframe>
+        <iframe
+          ref={iframeRef}
+          width="100%"
+          height="500px"
+          title="trailer"
+        ></iframe>
       </ModalContent>
     </Modal>
-  )
-}
+  );
+};
 
 export default HeroSlide;
